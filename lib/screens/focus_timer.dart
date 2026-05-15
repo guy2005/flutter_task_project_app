@@ -26,11 +26,11 @@ class _FocusTimerScreenState extends State<FocusTimerScreen> {
         setState(() {
           _secondsRemaining--;
           
-          // --- ส่วนที่เพิ่มเข้ามาใหม่: บันทึกทุก 1 นาที ---
-          // เช็กว่าวินาทีที่เหลือ หารด้วย 60 ลงตัวหรือไม่ (และไม่ใช่ค่าเริ่มต้น)
-          if (_secondsRemaining > 0 && _secondsRemaining % 60 == 0) {
-            // สั่งบวกเวลาเข้า Database ทันที 60 วินาที (1 นาที)
-            taskController.addTimeSpent(widget.task.id, 60);
+          // --- บันทึกทุก 10 วินาที ---
+          // เช็กว่าวินาทีที่เหลือ หารด้วย 10 ลงตัวหรือไม่ (และไม่ใช่ค่าเริ่มต้น)
+          if (_secondsRemaining > 0 && _secondsRemaining % 10 == 0) {
+            // สั่งบวกเวลาเข้า Database ทันที 10 วินาที
+            taskController.addTimeSpent(widget.task.id, 10);
           }
         });
       } else {
@@ -44,9 +44,6 @@ class _FocusTimerScreenState extends State<FocusTimerScreen> {
     setState(() => _isRunning = false);
     
     if (completed) {
-      // ถ้าครบ 25 นาทีเป๊ะ (วินาทีสุดท้าย) ให้บวกวินาทีที่เหลือเศษ หรือถ้าหารลงตัวอยู่แล้ว
-      // ในกรณีนี้ถ้าบันทึกทุกนาทีไปแล้ว บรรทัดนี้อาจจะไม่ต้องบวกซ้ำ 
-      // หรือจะเปลี่ยนเป็นแจ้งเตือนอย่างเดียวพอครับ
       _showCompletionDialog();
     }
   }

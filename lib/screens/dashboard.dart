@@ -15,6 +15,12 @@ class DashboardScreen extends StatelessWidget {
           final tasks = taskController.tasks;
           final total = tasks.length;
           final done = tasks.where((t) => t.isDone).length;
+          
+          // เช็กงานที่ "กำลังทำ" (ยังไม่เสร็จ และมีการจับเวลาไปแล้วมากกว่า 0 วินาที)
+          final inProgress = tasks.where((t) => !t.isDone && t.totalSeconds > 0).length;
+          // เช็กงานที่ "ค้างส่ง" (ยังไม่เสร็จ และยังไม่เคยจับเวลาเลย)
+          final pending = tasks.where((t) => !t.isDone && t.totalSeconds == 0).length;
+          
           final percent = total == 0 ? 0.0 : done / total;
 
           String statusText = 'สู้ๆ ใกล้เสร็จแล้ว!';
@@ -59,13 +65,21 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
+                
+                // ปรับเลย์เอาต์เป็น 2 แถว แถวละ 2 กล่อง
                 Row(
                   children: [
                     _buildStatCard('ทั้งหมด', total.toString(), Colors.blue),
                     const SizedBox(width: 16),
                     _buildStatCard('เสร็จแล้ว', done.toString(), Colors.green),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    _buildStatCard('กำลังทำ', inProgress.toString(), Colors.purple),
                     const SizedBox(width: 16),
-                    _buildStatCard('ค้างส่ง', (total - done).toString(), Colors.orange),
+                    _buildStatCard('ยังไม่ได้เริ่ม', pending.toString(), Colors.orange),
                   ],
                 ),
               ],
